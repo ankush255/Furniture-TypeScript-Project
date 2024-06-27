@@ -9,12 +9,6 @@ const mongoURL : string = process.env.MONGO_URL as string ;
 const filePath = path.join(__dirname,"/image");
 
 app.use(express.json());
-app.use("/src/image", express.static(filePath));
-
-// App Routes
-
-import appRoutes from './routes/User/index.routes';
-app.use("/api/app", appRoutes);
 
 
 // Database Connection ( DB )
@@ -23,9 +17,31 @@ mongoose
     .then(() => console.log("DB is Connected..."))
     .catch((error) => console.log(error));
 
+app.use("/src/image", express.static(filePath));
+
+
+
+// App Routes
+
+import appRoutes from './routes/User/index.routes';
+app.use("/api/app", appRoutes);
+
+
+
+
+// Admin Routes
+
+import adminRoutes from './routes/Admin/index.routes';
+app.use("/api/admin", adminRoutes);
+
+
+
+
 app.get('/', (req: Request , res:Response)=>{
     res.send("Welcome To Express Server....");
 })
+
+
 
 
 app.listen(port ,()=>{

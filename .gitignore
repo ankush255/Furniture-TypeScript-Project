@@ -7,3 +7,9 @@ package-lock.json
 /src/models/cart.model.ts
 /src/routes/user/cart.routes.ts
 /src/services/cart.service.ts
+
+/src/controller/user/order.controller.ts
+/src/interface/order.interface.ts
+/src/models/order.model.ts
+/src/routes/user/order.routes.ts
+/src/services/order.service.ts

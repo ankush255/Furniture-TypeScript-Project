@@ -2,11 +2,6 @@
 package-lock.json
 .env
 
-/src/controller/user/cart.controller.ts
-/src/interface/cart.interface.ts
-/src/models/cart.model.ts
-/src/routes/user/cart.routes.ts
-/src/services/cart.service.ts
 
 /src/controller/user/order.controller.ts
 /src/interface/order.interface.ts

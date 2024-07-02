@@ -14,7 +14,7 @@ const cartServices = new CartServices();
 // Global Variable
 declare global {
     namespace Express {
-      interface Request {
+        interface Request {
         user?: IUser;
       }
     }
@@ -22,32 +22,34 @@ declare global {
 
 export const createNewOrder = async (req: Request, res: Response) => {
     try {
-        let userCarts = await cartServices.getAllCarts(req.query, req.user?._id);
-        if (userCarts.result.carts.length === 0) {
+        let userCarts: any = await cartServices.getAllCarts(req.query, req.user?._id);
+        if (userCarts.result === 0) {
             res.json({ message: "User Has No Cart Items...." });
             return;
         }
-        
-        let orderItems = userCarts.result.carts.map((item: any) => ({
-            quantity: item.products.quantity,
-            price: item.products.productId.price,
-            productId: item.products.productId._id,
+        // console.log(userCarts);
+
+        let orderItems = userCarts.result.map((item: any) => ({
+            quantity: item.quantity,
+            price: item.products.price,
+            productId: item.products._id,
         }));
+        // console.log(orderItems);
 
         let totalAmount = orderItems.reduce(
             (total: number, item: any) => total + item.quantity * item.price,
             0
         );
-
+        // console.log(totalAmount);
+        
         let newOrder = await orderServices.newOrder(
             { products: orderItems, totalAmount },
             req.user?._id as ObjectId
         ) as IOrder;
         
-        userCarts = await cartServices.updateMany(req.user?._id as ObjectId,{isDelete: true}) as ICart;
-        console.log(userCarts);
+        await cartServices.updateMany(req.user?._id as ObjectId,{isDelete: true}) as ICart;
         
-        res.status(201).json(newOrder);
+        res.status(201).json({order: newOrder, message: 'New Order Created'});
     } catch (err) {
         console.error(err);
         res.json({ message: "Internal Server Error" });
@@ -56,7 +58,7 @@ export const createNewOrder = async (req: Request, res: Response) => {
 
 export const getAllOrder = async (req: Request, res: Response) => {
     try {
-        let results = await orderServices.getAllOrder(req.query, req.user?._id as ObjectId);
+        let results = await orderServices.getAllOrder(req.query, req.user?._id as ObjectId) as any;
         if (!results || results.orders.length === 0) {
             res.json({ message: "User Has No Orders..." });
             return;

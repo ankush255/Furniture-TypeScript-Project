@@ -15,8 +15,8 @@ class OrderServices {
         totalAmount: body.totalAmount,
       });
     } catch (err) {
-      console.error(err);
-      return err as Error;
+      console.log(err);
+      return err ;
     }
   }
 
@@ -94,8 +94,8 @@ class OrderServices {
         totalAmount 
     };
     } catch (err) {
-      console.error(err);
-      return err.message;
+      console.log(err);
+      return err;
     }
   }
 
@@ -108,8 +108,8 @@ class OrderServices {
         { new: true }
       );
     } catch (err) {
-      console.error(err);
-      return err.message;
+      console.log(err);
+      return err;
     }
   }
 }

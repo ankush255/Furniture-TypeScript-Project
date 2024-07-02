@@ -58,7 +58,7 @@ export default class CartServices {
     try {
       // Pagination
       let pageNo: number = Number(query.pageNo || 1);
-      let perPage: number = Number(query.perPage || 5);
+      let perPage: number = Number(query.perPage || 4);
       let skip: number = (pageNo - 1) * perPage;
 
       let userCart =
@@ -86,7 +86,7 @@ export default class CartServices {
         {
           $lookup: {
             from: "products",
-            localField: "cartItem",
+            localField: "products",
             foreignField: "_id",
             pipeline: [
               {
@@ -97,10 +97,10 @@ export default class CartServices {
                 },
               },
             ],
-            as: "cartItem",
+            as: "products",
           },
         },
-        { $set: { cartItem: { $first: "$cartItem" } } },
+        { $set: { products: { $first: "$products" } } },
         {
           $lookup: {
             from: "users",
@@ -109,8 +109,7 @@ export default class CartServices {
             pipeline: [
               {
                 $project: {
-                  firstName: 1,
-                  lastName: 1,
+                  fullName: 1,
                   email: 1,
                 },
               },
@@ -118,7 +117,7 @@ export default class CartServices {
             as: "user",
           },
         },
-        { $set: { user: { $first: "$user" } } },
+        { $set: { "user": { $first: "$user" } } },
         {
           $skip: skip,
         },
